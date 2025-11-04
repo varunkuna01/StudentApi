@@ -1,6 +1,6 @@
-﻿using StudentApi.Models;
+﻿using System.Collections.Generic;
+using StudentApi.Models;
 using StudentApi.Repositories;
-using System.Collections.Generic;
 
 namespace StudentApi.Services
 {
@@ -8,19 +8,27 @@ namespace StudentApi.Services
     {
         private readonly IStudentRepository _repository;
 
-        public StudentService(IStudentRepository repository)
+        public StudentService(IStudentRepository repository)        
         {
             _repository = repository;
         }
 
-        public IEnumerable<Student> GetAllStudents()
-        {
-            return _repository.GetAll();
-        }
+        public IEnumerable<Student> GetAllStudents() => _repository.GetAll();
 
-        public void AddStudent(Student student)
+        public Student? GetStudentById(int id) => _repository.GetById(id);
+
+        public Student AddStudent(Student student)
         {
             _repository.Add(student);
+            return student;
         }
+
+        public bool UpdateStudent(int id, Student student)
+        {
+            if (id != student.Id) return false;
+            return _repository.Update(student);
+        }
+
+        public bool DeleteStudent(int id) => _repository.Delete(id);
     }
 }
